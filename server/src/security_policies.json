@@ -1,0 +1,7 @@
+{
+  "mfaRequired": false,
+  "passwordRotationDays": 90,
+  "sessionTimeoutMinutes": 30,
+  "ipRestrictionEnabled": false,
+  "auditRetentionMonths": 12
+}

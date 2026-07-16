@@ -1,0 +1,20 @@
+[
+  {
+    "id": "DP-101",
+    "name": "Aero-Allergen Filtration Protocol",
+    "description": "Mandates high-efficiency HEPA screening at registered hospital nodes during particulate spikes.",
+    "active": true
+  },
+  {
+    "id": "DP-102",
+    "name": "Vector-Borne Isolation Grid",
+    "description": "Configures targeted clinical beds at clinic node hubs for immediate Dengue and Malaria quarantines.",
+    "active": false
+  },
+  {
+    "id": "DP-103",
+    "name": "Monsoon Evacuation Route Mapping",
+    "description": "Modifies emergency ambulance driver routes dynamically during regional heavy monsoon alerts.",
+    "active": false
+  }
+]

@@ -1,0 +1,478 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  roleId    String   // Refers to our 12 roles (e.g. 'patient', 'doctor')
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED, ACTIVE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Role-specific relationships (1-to-1)
+  patientProfile            PatientProfile?
+  familyMemberProfile       FamilyMemberProfile?
+  doctorProfile             DoctorProfile?
+  nurseProfile              NurseProfile?
+  hospitalAdminProfile      HospitalAdminProfile?
+  superAdminProfile         SuperAdminProfile?
+  ambulanceDriverProfile    AmbulanceDriverProfile?
+  pharmacistProfile         PharmacistProfile?
+  diagnosticStaffProfile    DiagnosticStaffProfile?
+  ruralVolunteerProfile     RuralVolunteerProfile?
+  emergencyOperatorProfile  EmergencyOperatorProfile?
+  networkAdminProfile       NetworkAdminProfile?
+
+  // Documents
+  patientDocuments          MedicalDocument[] @relation("PatientDocuments")
+  uploadedDocuments         MedicalDocument[] @relation("UploadedDocuments")
+
+  // Telemedicine
+  patientAppointments       TelemedicineAppointment[] @relation("PatientAppointments")
+  doctorAppointments        TelemedicineAppointment[] @relation("DoctorAppointments")
+
+  // Emergency
+  patientEmergencies        EmergencyRequest[] @relation("PatientEmergencies")
+  operatorEmergencies       EmergencyRequest[] @relation("OperatorEmergencies")
+  ambulanceEmergencies      EmergencyRequest[] @relation("AmbulanceEmergencies")
+}
+
+model PatientProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  fullName             String
+  dob                  DateTime
+  gender               String
+  bloodGroup           String?
+  phone                String
+  profilePhoto         String? // File path
+
+  // Medical Information
+  existingConditions   String? // Comma-separated or JSON
+  allergies            String?
+  currentMedications   String?
+
+  // Emergency Contact
+  emergencyContactName String?
+  emergencyContactPhone String?
+
+  // Insurance
+  insuranceProvider    String?
+  insuranceId          String?
+
+  // Address
+  country              String
+  state                String
+  city                 String
+  address              String
+  pinCode              String
+
+  familyMembersLinked  Boolean @default(false)
+  consentGiven         Boolean @default(false)
+}
+
+model FamilyMemberProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  relationship         String
+  phone                String
+  linkedPatientIds     String? // Comma-separated list of PatientProfile IDs
+  
+  emergencyAccess      Boolean @default(false)
+  viewReports          Boolean @default(false)
+  viewPrescriptions    Boolean @default(false)
+  receiveAlerts        Boolean @default(false)
+  appointmentAccess    Boolean @default(false)
+}
+
+model DoctorProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  profilePhoto         String?
+  gender               String
+  dob                  DateTime
+  phone                String
+
+  medicalLicenseNumber String
+  specialization       String
+  yearsOfExperience    Int
+  qualifications       String
+  medicalCouncilReg    String
+  hospitalAffiliation  String?
+  consultationFees     Float?
+
+  availableDays        String? // E.g., "Mon,Wed,Fri"
+  availableTimeSlots   String? // E.g., "09:00-12:00, 14:00-18:00"
+  telemedicine         Boolean @default(false)
+
+  // Document Paths
+  licenseUpload        String?
+  degreeCertificate    String?
+  govtIdProof          String?
+}
+
+model NurseProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+  gender               String
+  dob                  DateTime
+
+  nursingLicenseNumber String
+  experience           Int
+  assignedHospital     String?
+  department           String?
+
+  // Document Paths
+  licenseCertificate   String?
+  govtIdProof          String?
+}
+
+model HospitalAdminProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+
+  hospitalName         String
+  hospitalRegNumber    String
+  hospitalType         String
+  numberOfBeds         Int
+  icuCapacity          Int
+  address              String
+
+  // Document Paths
+  hospitalLicense      String?
+  accreditationDocs    String?
+  gstTaxDocs           String?
+
+  requestedPermissions String? // JSON or comma-separated
+  staffCapacity        Int?
+}
+
+model SuperAdminProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  organizationEmail    String
+  masterAccessKey      String? // Hashed or secure
+  mfaSetup             Boolean @default(false)
+  securityQuestions    String? // JSON structure
+}
+
+model AmbulanceDriverProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+  dob                  DateTime
+  gender               String
+
+  ambulanceRegNumber   String
+  vehicleType          String
+  licenseNumber        String
+  drivingExperience    Int
+
+  // Documents
+  drivingLicenseUpload String?
+  emergencyCert        String?
+  govtIdProof          String?
+
+  gpsPermission        Boolean @default(false)
+  deviceRegistration   String?
+}
+
+model PharmacistProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+
+  pharmacyLicenseNum   String
+  pharmacyName         String
+  experience           Int
+  linkedHospital       String?
+
+  // Documents
+  pharmacyLicense      String?
+  idProof              String?
+}
+
+model DiagnosticStaffProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+
+  labCertification     String
+  department           String
+  diagnosticCenterName String
+  experience           Int
+
+  // Documents
+  certDocuments        String?
+  govtIdProof          String?
+}
+
+model RuralVolunteerProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+  villageArea          String
+
+  healthcareExperience Int
+  languagesSpoken      String?
+  availability         String?
+  ngoAssociation       String?
+
+  // Documents
+  identityProof        String?
+  recommendationLetter String?
+}
+
+model EmergencyOperatorProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+
+  emergencyCenter      String
+  shiftTiming          String
+  regionAllocation     String
+
+  // Documents
+  emergencyCert        String?
+  idVerification       String?
+}
+
+model NetworkAdminProfile {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName             String
+  phone                String
+
+  healthcareNetworkName String
+  networkId            String
+  region               String
+
+  hospitalAccessScope  String?
+  analyticsAccess      Boolean @default(false)
+  operationalAccess    Boolean @default(false)
+}
+
+// Global Audit Logs for tracking events
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String
+  roleId       String
+  action       String
+  resourceType String
+  resourceId   String?
+  details      String?  // JSON serialized string
+  timestamp    DateTime @default(now())
+}
+
+model MedicalDocument {
+  id           String   @id @default(cuid())
+  patientId    String
+  uploaderId   String
+  fileName     String
+  fileType     String
+  fileUrl      String
+  notes        String?
+  uploadedAt   DateTime @default(now())
+
+  patient      User     @relation("PatientDocuments", fields: [patientId], references: [id], onDelete: Cascade)
+  uploader     User     @relation("UploadedDocuments", fields: [uploaderId], references: [id], onDelete: Cascade)
+}
+
+model TelemedicineAppointment {
+  id              String   @id @default(cuid())
+  patientId       String
+  doctorId        String
+  scheduledTime   DateTime
+  status          String   @default("SCHEDULED") // SCHEDULED, ACTIVE, COMPLETED, CANCELLED
+  meetingLink     String?
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  patient         User     @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+  doctor          User     @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+model EmergencyRequest {
+  id          String   @id @default(cuid())
+  patientId   String
+  latitude    Float
+  longitude   Float
+  status      String   @default("PENDING") // PENDING, DISPATCHED, RESOLVED, CANCELLED
+  priority    String   @default("CRITICAL")
+  description String?
+  operatorId  String?
+  ambulanceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  patient     User     @relation("PatientEmergencies", fields: [patientId], references: [id])
+  operator    User?    @relation("OperatorEmergencies", fields: [operatorId], references: [id])
+  ambulance   User?    @relation("AmbulanceEmergencies", fields: [ambulanceId], references: [id])
+}
+
+model HospitalDoctor {
+  id              String  @id @default(cuid())
+  name            String
+  specialty       String
+  department      String
+  status          String  @default("Available")
+  phone           String
+  roomAllocation  String?
+  assignedPatient String?
+}
+
+model ShiftAssignment {
+  id        String  @id @default(cuid())
+  staffName String
+  role      String  // Doctor, Nurse
+  shiftType String  // Morning, Evening, Night
+  day       String  // Monday, Tuesday, etc.
+}
+
+model LeaveRequest {
+  id        String  @id @default(cuid())
+  staffName String
+  role      String  // Doctor, Nurse
+  leaveType String
+  startDate String
+  endDate   String
+  reason    String
+  status    String  @default("PENDING") // PENDING, APPROVED, DECLINED
+}
+
+model WardBedAllocation {
+  id              String   @id @default(cuid())
+  wardName        String   // e.g., "ICU", "General Ward A"
+  bedNumber       String   // e.g., "Bed-101"
+  patientId       String?  // References User id
+  patientName     String?  // Cache patient name
+  status          String   @default("OCCUPIED") // OCCUPIED, VACANT
+  heartRate       Int      @default(75)
+  bloodPressure   String   @default("120/80")
+  spo2            Int      @default(98)
+  temperature     Float    @default(98.6)
+  lastUpdated     DateTime @default(now()) @updatedAt
+}
+
+model NurseCareItem {
+  id            String   @id @default(cuid())
+  patientName   String
+  category      String   // "Medication", "Task"
+  title         String   // e.g., "IV Ceftriaxone 1g" or "Check Blood Sugar"
+  scheduledTime String   // e.g., "22:00"
+  route         String?  // "IV", "Injection", "Oral", "N/A"
+  status        String   @default("PENDING") // PENDING, COMPLETED
+}
+
+model ClinicalAlert {
+  id            String   @id @default(cuid())
+  patientName   String
+  doctorName    String
+  instruction   String
+  priority      String   // "CRITICAL", "HIGH", "MEDIUM"
+  status        String   @default("PENDING") // PENDING, ACKNOWLEDGED
+  createdAt     DateTime @default(now())
+}
+
+model ShiftHandoverReport {
+  id                 String   @id @default(cuid())
+  outgoingNurseName  String
+  incomingNurseName  String
+  shiftType          String   // "Morning", "Evening", "Night"
+  handoverReport     String
+  criticalIncidents  String
+  createdAt          DateTime @default(now())
+}
+
+model PharmacyMedicine {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  genericName        String
+  stock              Int      @default(0)
+  minStock           Int      @default(10)
+  price              Float    @default(0.0)
+  isControlled       Boolean  @default(false)
+  genericAlternatives String   @default("") // Comma-separated alternative names
+}
+
+model MedicineBatch {
+  id           String   @id @default(cuid())
+  medicineId   String
+  batchNumber  String
+  expiryDate   DateTime
+  quantity     Int
+  createdAt    DateTime @default(now())
+}
+
+model PharmacistPrescription {
+  id              String   @id @default(cuid())
+  patientName     String
+  doctorName      String
+  medicines       String   // JSON string containing list of medicines (name, dosage, frequency, genericAlternative, interactionWarnings, isControlled)
+  counselingNotes String?
+  status          String   @default("PENDING") // PENDING, VALIDATED, DISPENSED
+  createdAt       DateTime @default(now())
+}
+
+model SupplierOrder {
+  id           String   @id @default(cuid())
+  supplierName String
+  medicineName String
+  quantity     Int
+  status       String   @default("ORDERED") // ORDERED, DELIVERED
+  createdAt    DateTime @default(now())
+}
+
+model ControlledSubstanceLog {
+  id            String   @id @default(cuid())
+  medicineName  String
+  patientName   String
+  quantity      Int
+  pharmacistName String
+  action        String   // DISPENSED, RESTOCKED
+  createdAt     DateTime @default(now())
+}
+

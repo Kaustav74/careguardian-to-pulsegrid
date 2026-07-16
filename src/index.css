@@ -1,0 +1,363 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   PULSEGRID — AMBER MERIDIAN DESIGN SYSTEM
+   A "sanctuary OS" aesthetic: medically precise yet emotionally
+   supportive. Deep brown surfaces, terracotta accents, gold
+   highlights, and cream text for a warm low-glow dark mode.
+   ============================================================ */
+
+@layer base {
+  * {
+    @apply box-border;
+    scrollbar-width: thin;
+    scrollbar-color: #472f2a #210e0b;
+  }
+
+  *::-webkit-scrollbar { width: 6px; height: 6px; }
+  *::-webkit-scrollbar-track { background: #210e0b; }
+  *::-webkit-scrollbar-thumb {
+    background: #472f2a;
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #59413b;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply text-gray-300 font-sans antialiased leading-relaxed;
+    background-color: #261614;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    color: #ffdad4;
+  }
+
+  /* ---- Selection highlight ---- */
+  ::selection {
+    background: rgba(255, 180, 161, 0.25);
+    color: #ffe7e2;
+  }
+}
+
+@layer components {
+  /* ============================================================
+     GLASS & SURFACE CARDS
+     Tonal layering with warm brown tints and subtle inner borders
+     ============================================================ */
+  .glass {
+    background: rgba(61, 38, 34, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(242, 233, 220, 0.05);
+    border-radius: 1.5rem;
+  }
+
+  .glass-dark {
+    background: rgba(61, 38, 34, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(242, 233, 220, 0.05);
+    border-radius: 1.5rem;
+  }
+
+  /* ============================================================
+     GRADIENT TEXT
+     Terracotta → Gold sweep for hero headings
+     ============================================================ */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #ffb4a1 0%, #f4be55 50%, #cec5b9 100%);
+  }
+
+  /* ============================================================
+     SIDEBAR NAVIGATION
+     ============================================================ */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer;
+    color: #a88a83;
+  }
+  .sidebar-item:hover {
+    color: #ffdad4;
+    background: rgba(255, 180, 161, 0.06);
+  }
+
+  .sidebar-item.active {
+    color: #ffdad4;
+    background: rgba(255, 180, 161, 0.12);
+    border: 1px solid rgba(255, 180, 161, 0.2);
+    box-shadow: 0 0 12px rgba(255, 180, 161, 0.08);
+  }
+
+  /* ============================================================
+     DASHBOARD WIDGET
+     Umber card with terracotta hover glow
+     ============================================================ */
+  .widget {
+    @apply glass-dark p-5 transition-all duration-300;
+  }
+  .widget:hover {
+    border-color: rgba(255, 180, 161, 0.25);
+    box-shadow: 0 0 20px rgba(255, 180, 161, 0.06), 0 8px 24px rgba(38, 22, 20, 0.5);
+  }
+
+  /* ============================================================
+     STATUS BADGES
+     Pill-shaped with 15% opacity backgrounds per design spec
+     ============================================================ */
+  .badge-success {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+    background: rgba(244, 190, 85, 0.15);
+    color: #f4be55;
+    border: 1px solid rgba(244, 190, 85, 0.3);
+  }
+  .badge-warning {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+    background: rgba(244, 190, 85, 0.15);
+    color: #f4be55;
+    border: 1px solid rgba(244, 190, 85, 0.3);
+  }
+  .badge-danger {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+    background: rgba(255, 180, 161, 0.15);
+    color: #ffb4a1;
+    border: 1px solid rgba(255, 180, 161, 0.3);
+  }
+  .badge-info {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+    background: rgba(255, 180, 161, 0.15);
+    color: #ffb4a1;
+    border: 1px solid rgba(255, 180, 161, 0.3);
+  }
+  .badge-neutral {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full;
+    background: rgba(71, 47, 42, 0.6);
+    color: #a88a83;
+    border: 1px solid #59413b;
+  }
+
+  /* ============================================================
+     INPUT FIELDS
+     Dark umber fill with gold bottom-border accent
+     "Surgical" refined look per design spec
+     ============================================================ */
+  .input {
+    @apply w-full px-4 py-3 text-sm outline-none transition-all duration-200;
+    background: #3D2622;
+    color: #ffdad4;
+    border: none;
+    border-bottom: 2px solid #f4be55;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+  .input::placeholder {
+    color: #a88a83;
+  }
+  .input:focus {
+    border-bottom-color: #f4be55;
+    box-shadow: 0 2px 0 0 rgba(244, 190, 85, 0.3);
+  }
+
+  /* ============================================================
+     BUTTONS
+     Primary: Terracotta fill + Cream text
+     Secondary: Gray with warm border
+     Outline: Gold stroke
+     Ghost: JetBrains Mono in Gold
+     Danger: Error container
+     ============================================================ */
+  .btn-primary {
+    @apply font-semibold px-5 py-2.5 rounded transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2;
+    background: #bd401e;
+    color: #ffe7e2;
+    box-shadow: 0 4px 14px rgba(189, 64, 30, 0.3);
+  }
+  .btn-primary:hover {
+    background: #ac3412;
+    box-shadow: 0 6px 20px rgba(189, 64, 30, 0.4);
+  }
+  .btn-primary:focus {
+    ring-color: rgba(255, 180, 161, 0.4);
+  }
+
+  .btn-secondary {
+    @apply font-semibold px-5 py-2.5 rounded transition-all duration-200 active:scale-95;
+    background: transparent;
+    color: #f4be55;
+    border: 1px solid #f4be55;
+  }
+  .btn-secondary:hover {
+    background: rgba(244, 190, 85, 0.08);
+  }
+
+  .btn-danger {
+    @apply font-semibold px-5 py-2.5 rounded transition-all duration-200 active:scale-95;
+    background: #93000a;
+    color: #ffdad6;
+    box-shadow: 0 4px 14px rgba(147, 0, 10, 0.3);
+  }
+  .btn-danger:hover {
+    background: #b31217;
+  }
+
+  .btn-ghost {
+    @apply px-5 py-2.5 rounded transition-all duration-200 active:scale-95;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: #f4be55;
+  }
+  .btn-ghost:hover {
+    color: #ffdea7;
+    background: rgba(244, 190, 85, 0.08);
+  }
+
+  /* ============================================================
+     SKELETON LOADING
+     Warm brown pulse
+     ============================================================ */
+  .skeleton {
+    border-radius: 0.5rem;
+    background: #3b2420;
+    animation: amberPulse 1.8s ease-in-out infinite;
+  }
+
+  /* ============================================================
+     MEDICAL CHIPS (pill-shaped indicators)
+     15% opacity background with full-saturation text
+     ============================================================ */
+  .chip-primary {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(255, 180, 161, 0.15);
+    color: #ffb4a1;
+  }
+  .chip-secondary {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(244, 190, 85, 0.15);
+    color: #f4be55;
+  }
+  .chip-tertiary {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(206, 197, 185, 0.15);
+    color: #cec5b9;
+  }
+
+  /* ============================================================
+     TABLE — Zebra striping with cream tint
+     ============================================================ */
+  .table-zebra tbody tr:nth-child(even) {
+    background: rgba(242, 233, 220, 0.02);
+  }
+  .table-zebra tbody tr:hover {
+    background: rgba(255, 180, 161, 0.05);
+  }
+}
+
+@layer utilities {
+  /* Warm background overlays */
+  .bg-white\/5  { background-color: rgba(206, 197, 185, 0.05); }
+  .bg-white\/8  { background-color: rgba(206, 197, 185, 0.08); }
+  .bg-white\/10 { background-color: rgba(206, 197, 185, 0.10); }
+
+  /* ============================================================
+     ANIMATIONS
+     ============================================================ */
+
+  /* Standard transitions */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-in-out;
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.4s ease-in-out;
+  }
+
+  /* Terracotta pulse glow — for live telemetry / ECG / HR */
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  /* Gold pulse glow — for active status indicators */
+  .animate-gold-glow {
+    animation: goldGlow 2.5s ease-in-out infinite;
+  }
+
+  /* Warm shadow utility classes */
+  .shadow-warm {
+    box-shadow: 0 8px 24px rgba(38, 22, 20, 0.5);
+  }
+  .shadow-warm-lg {
+    box-shadow: 0 12px 40px rgba(38, 22, 20, 0.6);
+  }
+
+  /* Active focus glow — terracotta outer glow per design spec */
+  .focus-glow:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 180, 161, 0.25), 0 0 16px rgba(255, 180, 161, 0.15);
+  }
+
+  /* Inner border for surface cards — 5% cream opacity */
+  .border-inner-cream {
+    box-shadow: inset 0 0 0 1px rgba(242, 233, 220, 0.05);
+  }
+
+  /* Monospace label utility */
+  .font-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     KEYFRAMES
+     ============================================================ */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to   { transform: translateX(0);     opacity: 1; }
+  }
+
+  @keyframes slideInUp {
+    from { transform: translateY(16px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  @keyframes amberPulse {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 0.7; }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 8px rgba(255, 180, 161, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 24px rgba(255, 180, 161, 0.45), 0 0 48px rgba(255, 180, 161, 0.15);
+    }
+  }
+
+  @keyframes goldGlow {
+    0%, 100% {
+      box-shadow: 0 0 6px rgba(244, 190, 85, 0.15);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(244, 190, 85, 0.35), 0 0 40px rgba(244, 190, 85, 0.1);
+    }
+  }
+}

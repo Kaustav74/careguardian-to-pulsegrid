@@ -1,0 +1,58 @@
+{
+  "superAdmin": {
+    "telemedicine": true,
+    "sos": true,
+    "records": true,
+    "prescribe": true,
+    "pharmacy": true,
+    "audit": true
+  },
+  "hospitalAdmin": {
+    "telemedicine": true,
+    "sos": true,
+    "records": true,
+    "prescribe": false,
+    "pharmacy": true,
+    "audit": true
+  },
+  "doctor": {
+    "telemedicine": true,
+    "sos": true,
+    "records": true,
+    "prescribe": true,
+    "pharmacy": false,
+    "audit": false
+  },
+  "patient": {
+    "telemedicine": true,
+    "sos": true,
+    "records": false,
+    "prescribe": false,
+    "pharmacy": false,
+    "audit": false
+  },
+  "ambulanceDriver": {
+    "telemedicine": false,
+    "sos": true,
+    "records": false,
+    "prescribe": false,
+    "pharmacy": false,
+    "audit": false
+  },
+  "emergencyOperator": {
+    "telemedicine": false,
+    "sos": true,
+    "records": true,
+    "prescribe": false,
+    "pharmacy": false,
+    "audit": true
+  },
+  "ruralVolunteer": {
+    "telemedicine": false,
+    "sos": true,
+    "records": false,
+    "prescribe": false,
+    "pharmacy": false,
+    "audit": false
+  }
+}

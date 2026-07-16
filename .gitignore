@@ -1,0 +1,119 @@
+# ============================================================
+# CAREGUARDIAN — .gitignore
+# Covers: Node.js, React/Vite, Prisma, Windows, macOS
+# ============================================================
+
+# ── Dependencies ────────────────────────────────────────────
+node_modules/
+server/node_modules/
+.pnp
+.pnp.js
+
+# ── Environment Variables (NEVER upload) ────────────────────
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test.local
+.env.production
+.env.production.local
+server/.env
+server/.env.local
+server/.env.production
+
+# ── Database Files ───────────────────────────────────────────
+server/prisma/dev.db
+server/prisma/dev.db-journal
+server/prisma/*.db
+server/prisma/*.db-journal
+*.sqlite
+*.sqlite3
+
+# ── Build Outputs ────────────────────────────────────────────
+dist/
+build/
+server/dist/
+server/build/
+.vite/
+out/
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Uploads & User Content ───────────────────────────────────
+uploads/
+public/uploads/
+server/uploads/
+
+# ── Sensitive / Hackathon Scratch Files ──────────────────────
+password.txt
+passwords.txt
+tsc_errors.txt
+*.bak
+*.tmp
+scratch/
+
+# ── TypeScript Build Cache ───────────────────────────────────
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ── Testing ──────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Prisma ───────────────────────────────────────────────────
+# Keep: schema.prisma, migrations/, seed.ts
+# Ignore: generated client (can be regenerated)
+server/node_modules/.prisma/
+
+# ── Package Manager Locks (keep one, ignore others) ──────────
+# Keeping package-lock.json — remove this line if you use yarn/pnpm
+yarn.lock
+pnpm-lock.yaml
+
+# ── Editor & IDE ─────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+
+# ── Operating System ─────────────────────────────────────────
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+# ── Miscellaneous ────────────────────────────────────────────
+.cache/
+.parcel-cache/
+.turbo/
+.vercel/
+.netlify/
+*.pid
+*.seed
+*.pid.lock

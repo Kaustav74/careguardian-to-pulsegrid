@@ -1,0 +1,7 @@
+{
+  "maintenanceMode": false,
+  "failoverMode": "ACTIVE_ACTIVE",
+  "sessionTimeoutMinutes": 30,
+  "maxUploadMb": 10,
+  "telemedicinePort": 4000
+}
